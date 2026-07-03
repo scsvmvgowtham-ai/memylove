@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hasini & Adithya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon-deep:#2A0A14;
+    --maroon:#5C1A2E;
+    --rose-gold:#C9A15A;
+    --blush:#F3C9D2;
+    --cream:#C9BCA8;
+    --flame:#FF8A5B;
+    --ink:#2A0A14;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background-color:var(--cream);
+    background-image:
+      linear-gradient(125deg,
+        rgba(150,45,60,.55) 0%,
+        rgba(165,105,35,.52) 16%,
+        rgba(140,130,35,.50) 32%,
+        rgba(35,110,75,.52) 48%,
+        rgba(30,95,120,.52) 64%,
+        rgba(85,55,140,.52) 80%,
+        rgba(150,35,95,.55) 100%);
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--blush); color:var(--maroon-deep);}
+
+  /* ---------- Petals ---------- */
+  #petals{position:fixed; inset:0; pointer-events:none; z-index:5; overflow:hidden;}
+  .petal{
+    position:absolute; top:-5%;
+    width:14px; height:14px;
+    background:radial-gradient(circle at 30% 30%, var(--blush), var(--maroon) 120%);
+    border-radius:0 60% 0 60%;
+    opacity:.75;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0deg); opacity:.85;}
+    100%{transform:translateY(110vh) rotate(360deg); opacity:0;}
+  }
+
+  /* ---------- Tap hearts ---------- */
+  .tap-heart{
+    position:fixed; pointer-events:none; z-index:999;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:600;
+    color:var(--maroon-deep);
+    white-space:nowrap;
+    animation:floatUp 1.8s ease-out forwards;
+    font-size:15px;
+    text-shadow:0 0 12px var(--blush);
+  }
+  @keyframes floatUp{
+    0%{transform:translate(-50%,-50%) scale(.6); opacity:0;}
+    15%{opacity:1; transform:translate(-50%,-70%) scale(1);}
+    100%{transform:translate(-50%,-220%) scale(1.05); opacity:0;}
+  }
+
+  /* ---------- Gate ---------- */
+  #gate{
+    position:fixed; inset:0; z-index:200;
+    background:radial-gradient(ellipse at center, var(--maroon) 0%, var(--maroon-deep) 75%);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    transition:opacity 1.2s ease, visibility 1.2s ease;
+    text-align:center; padding:24px;
+  }
+  #gate.hide{opacity:0; visibility:hidden;}
+  .diya{width:56px; height:56px; margin-bottom:28px; position:relative;}
+  .flame{
+    width:14px; height:26px; background:linear-gradient(to top, var(--flame), #FFD98E);
+    border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+    position:absolute; left:50%; top:-8px; transform:translateX(-50%);
+    animation:flicker 1.6s ease-in-out infinite alternate;
+    filter:drop-shadow(0 0 10px var(--flame));
+  }
+  @keyframes flicker{
+    0%{transform:translateX(-50%) scale(1) rotate(-2deg);}
+    50%{transform:translateX(-50%) scale(1.08) rotate(2deg);}
+    100%{transform:translateX(-52%) scale(.95) rotate(-1deg);}
+  }
+  .diya-base{
+    width:56px; height:20px; background:linear-gradient(180deg, var(--rose-gold), #8a6a2e);
+    border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
+    position:absolute; bottom:0;
+  }
+  #gate h1{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:500;
+    color:var(--cream);
+    font-size:clamp(28px,5vw,44px);
+    margin-bottom:10px;
+    letter-spacing:.5px;
+  }
+  #gate p{
+    color:var(--blush);
+    font-size:14px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:36px;
+  }
+  #enterBtn{
+    background:transparent;
+    border:1px solid var(--rose-gold);
+    color:var(--rose-gold);
+    padding:14px 38px;
+    font-family:'Jost', sans-serif;
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .4s ease;
+  }
+  #enterBtn:hover{background:var(--rose-gold); color:var(--maroon-deep);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:120px 24px 80px;
+    position:relative;
+    background:radial-gradient(ellipse at top, rgba(255,255,255,.10), transparent 60%);
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:4px; text-transform:uppercase;
+    color:var(--maroon); opacity:.7; margin-bottom:22px;
+  }
+  .hero h1{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--maroon-deep);
+    font-size:clamp(38px,8vw,84px);
+    line-height:1.05;
+    max-width:900px;
+  }
+  .hero .sub{
+    font-family:'Marcellus', serif;
+    color:var(--maroon);
+    font-size:clamp(16px,2.4vw,22px);
+    margin-top:26px;
+    letter-spacing:.5px;
+  }
+  .hero .date{
+    margin-top:40px; font-size:12px; letter-spacing:2px; color:var(--maroon); opacity:.55;
+  }
+  .scroll-hint{
+    position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+    font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--maroon); opacity:.5;
+    animation:bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+
+  /* ---------- Section shell ---------- */
+  section{position:relative; padding:100px 20px; max-width:760px; margin:0 auto;}
+  .divider{
+    display:flex; align-items:center; gap:16px; margin:0 auto 50px; max-width:760px;
+    padding:0 20px;
+  }
+  .divider span{height:1px; flex:1; background:linear-gradient(90deg, transparent, var(--rose-gold), transparent);}
+  .divider .mark{color:var(--rose-gold); font-size:14px; font-family:'Cormorant Garamond',serif;}
+
+  h2.section-title{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:600;
+    color:var(--maroon-deep);
+    font-size:clamp(28px,4.5vw,42px);
+    text-align:center;
+    margin-bottom:14px;
+  }
+  p.section-kicker{
+    text-align:center; font-size:12px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--maroon); opacity:.6; margin-bottom:50px;
+  }
+
+  .letter p{
+    font-size:17px; line-height:1.95; color:var(--ink); margin-bottom:20px;
+    opacity:0; transform:translateY(14px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .letter p.show{opacity:1; transform:translateY(0);}
+  .letter .highlight{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:600; font-size:22px;
+    color:var(--maroon-deep);
+    display:block; text-align:center; margin:36px 0;
+  }
+  .letter .song-note{
+    display:inline-block; font-size:13px; color:var(--maroon); opacity:.65;
+    border-left:2px solid var(--rose-gold); padding-left:10px; margin:14px 0; font-style:italic;
+  }
+  .letter blockquote{
+    border-left:2px solid var(--rose-gold);
+    padding:6px 0 6px 22px; margin:26px 0;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:19px;
+    color:var(--maroon);
+  }
+
+  /* ---------- Mythology cards ---------- */
+  .myth-grid{display:grid; grid-template-columns:1fr; gap:28px; max-width:760px; margin:0 auto;}
+  @media(min-width:720px){.myth-grid{grid-template-columns:1fr 1fr;}}
+  .myth-card{
+    background:linear-gradient(180deg, #F1E7D8, var(--cream));
+    border:1px solid rgba(201,161,90,.4);
+    padding:34px 28px;
+    position:relative;
+  }
+  .myth-card::before{
+    content:'';
+    position:absolute; top:14px; left:14px; right:14px; bottom:14px;
+    border:1px solid rgba(201,161,90,.35);
+    pointer-events:none;
+  }
+  .myth-card h3{
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600;
+    font-size:24px; color:var(--maroon-deep); margin-bottom:14px; text-align:center;
+  }
+  .myth-card p{font-size:15px; line-height:1.85; color:var(--ink); opacity:.9;}
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:760px; margin:0 auto;
+  }
+  @media(min-width:600px){.gallery-grid{grid-template-columns:repeat(3,1fr);}}
+  .frame{
+    aspect-ratio:1/1;
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--rose-gold);
+    background:linear-gradient(135deg, var(--blush), #fff);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+  }
+  .frame img{width:100%; height:100%; object-fit:cover; display:block;}
+  .frame .placeholder-label{
+    font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--maroon);
+    padding:10px; opacity:.75; font-family:'Jost',sans-serif;
+  }
+  .frame .heart-mark{font-size:20px; color:var(--rose-gold); margin-bottom:6px; display:block;}
+
+  /* ---------- Big / Featured Frame ---------- */
+  .big-frame-wrap{
+    max-width:520px; margin:0 auto 44px; padding:14px;
+    background:linear-gradient(180deg, #F1E7D8, var(--cream));
+    border:1px solid var(--rose-gold);
+    position:relative;
+  }
+  .big-frame-wrap::before{
+    content:''; position:absolute; top:8px; left:8px; right:8px; bottom:8px;
+    border:1px solid rgba(201,161,90,.45); pointer-events:none;
+  }
+  .big-frame{
+    aspect-ratio:4/5;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg, var(--blush), #fff);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    box-shadow:0 18px 40px -14px rgba(42,10,20,.35);
+  }
+  .big-frame img{width:100%; height:100%; object-fit:cover; display:block;}
+  .big-frame .placeholder-label{
+    font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:var(--maroon);
+    padding:10px; opacity:.75; font-family:'Jost',sans-serif;
+  }
+  .big-frame .heart-mark{font-size:30px; color:var(--rose-gold); margin-bottom:10px; display:block;}
+  .big-frame-caption{
+    text-align:center; margin-top:14px; font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-size:15px; color:var(--maroon); opacity:.75;
+  }
+
+  /* ---------- Closing ---------- */
+  .closing{
+    text-align:center;
+    padding:120px 24px 160px;
+  }
+  .closing .final{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:600;
+    color:var(--maroon-deep);
+    font-size:clamp(26px,5vw,46px);
+    line-height:1.3;
+    max-width:720px;
+    margin:0 auto 24px;
+  }
+  .closing .names{
+    font-family:'Marcellus', serif;
+    letter-spacing:3px; text-transform:uppercase; font-size:14px;
+    color:var(--maroon); opacity:.75; margin-top:30px;
+  }
+  .closing .tap-hint{
+    margin-top:60px; font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--maroon); opacity:.5;
+  }
+
+  footer{
+    text-align:center; padding:30px 20px 50px;
+    font-size:11px; color:var(--maroon); opacity:.4; letter-spacing:1px;
+  }
+
+  #muteBtn{
+    position:fixed; bottom:22px; right:22px; z-index:150;
+    width:46px; height:46px; border-radius:50%;
+    background:var(--maroon-deep); border:1px solid var(--rose-gold); color:var(--rose-gold);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:16px; opacity:.9;
+    transition:transform .3s ease;
+  }
+  #muteBtn:hover{transform:scale(1.08);}
+</style>
+</head>
+<body>
+
+<div id="petals"></div>
+
+<!-- ============ ENTRY GATE ============ -->
+<div id="gate">
+  <div class="diya">
+    <div class="flame"></div>
+    <div class="diya-base"></div>
+  </div>
+  <h1>Hasini Garu...</h1>
+  <p>a letter, waiting for you</p>
+  <button id="enterBtn">Enter</button>
+</div>
+
+<!-- ============ AUDIO ============ -->
+<!--
+  HOW TO ADD YOUR SONG:
+  1. Put this HTML file and your song file in the SAME folder.
+  2. Rename your song file to exactly:  song.mp3
+     (or change the src below to match whatever you named it, e.g. "song.mp3")
+  3. If you'd rather keep things in a subfolder (e.g. a folder called "media"),
+     put song.mp3 inside it and change the src to: media/song.mp3
+-->
+<audio id="bgm" loop preload="none">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+<div id="muteBtn" title="Play / Pause music">♪</div>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="eyebrow">For Hasini, from Adithya</div>
+  <h1>I Love You,<br>Hasini Garu.</h1>
+  <div class="sub">Manam Pelli Cheskundham. ❤️</div>
+  <div class="date">03 · 07 · 2026 &nbsp;·&nbsp; 08:57 PM</div>
+  <div class="scroll-hint">scroll down ↓</div>
+</div>
+
+<!-- ============ LETTER ============ -->
+<section>
+  <div class="divider"><span></span><span class="mark">❦</span><span></span></div>
+  <h2 class="section-title">Naa Manasu Lo Miru</h2>
+  <p class="section-kicker">the letter</p>
+
+  <div class="letter" id="letterBody">
+    <p>Nenem vadhileyyaledhu... marchipoledhu.</p>
+    <p>Endhukante miru naa alavatu kaadhu vadileseyadaniki... naa gnapakam kaadhu marchipovadaniki.</p>
+    <p>Miru naa jeevitham lo kalisipoyaru — prema anedhi switch kaadhu, ishtam vachinappudu off cheyyadaniki.</p>
+    <p>Adhi gundello modalaithe jeevitham antha untundhi. Prathi roju, prathi poota, prathi ganta, prathi nimisham, prathi second... naa manasu mee pere pilusthune untundhi.</p>
+    <p>Oka nimisham oopiri aagipoyina brathakagalanu emo... kani oka nimisham kuda mee gurinchi alochinchakunda undadam naa valla kaadhu.</p>
+    <p>Naa kalla mundhu kanipinchedhi mee navvu. Naa chevullo vinipinchedhi mee maatalu. Naa gunde kottukune prathi sari gurthochedhi okka pere... Hasini.</p>
+    <p>Naa manasu ki okka alochana matrame telusu... adhi miru.</p>
+
+    <span class="highlight">"I Love You, Hasini Garu. Manam Pelli Cheskundham."</span>
+
+    <p>Nenu ekkada nunchi start chesthano teliyadhu. Kani ending matram ento starting lone cheptha. First ending thone start chestha.</p>
+    <p>Ela undhi idea?</p>
+    <p>Nenu malli jarigina vishayanni, ledha already cheppina vishayanni repeat chesthe miru kopadatharu ani telusu. Andhuke avoid cheyyali anukuntanu. Kani emo andi... naku kuda teliyadhu em rayalo. Edho ala songs vintuu type chesthu pothunna.</p>
+    <p class="song-note">♪ correct time ki "Yedho Priya Ragam Vintunna" song vachindhi.</p>
+    <p>Manam matladukokunda ippatiki 3 days ayyindhi. Miru ee 3 days ela unnaro naku teliyadhu. Kani nenu matram prathi second mee alochanalathone brathukuthunna. Nijam cheppalante naa valla assalu avvatledhu.</p>
+    <p>Ela ante... pilchukodaniki gaali unna, miru lekapothe brathakalenu anipisthundhi.</p>
+
+    <p>Hasini Garu... miru edho oka karanam cheppi nannu vadilinchukovali ani chusthunnaru. Miru ela ayithe nannu vadilinchukovali ani try chesthunnaro, nenu alane mimalni dakkinchukovali ani try chesthunna.</p>
+    <p>Endhukante naku miru kavali. Nenu mimalni pelli chesukoni, naa jeevitham motham mitho panchukovali ani korukuntunna.</p>
+
+    <p>Miru prathi sari oka maata antaru... <em>"Naa problem miku teliyadhu."</em> Kani miru chepthe kadha naku telisedhi. Konni sarlu cheppakunda ardham chesukovadam naa valla kaadhu. Miru cheppithe nenu ardham chesukunta. Kani miru matram cheppakunda telusukovali antaru. Nenu try chesthunna... kani konni situations lo naa valla avvatledhu.</p>
+
+    <p>Kani naku telusu mee problem enti. Abbailu. Miru cheppina vishayalanni batti chusthe, thappu chesindhi vallu. Kani baadha padedhi matram miru. Adhi naku chala baadha ga untundhi.</p>
+    <p>Vallu ala behave cheyyadam thappu. Alanti vallani em analo kuda ardham kaadhu. Kani vallani nammi, vallani chusi andharu abbailu alane untaru ani anukoni, motham abbaila meedha hate penchukovadam matram correct kaadhu. Adhi mimmalni inka ekkuva baadha peduthundhi. Mee brain ni, mee heart ni rendu ibbandi peduthunnayi.</p>
+    <p>Naa bharya ala baadha padadam naku istam ledhu.</p>
+
+    <p>Miru antaru... <em>"Pelli kakunda bharya ani pilavakudadhu."</em> Sare. Kani okkasari alochinchandi... Pelli ante enti? Thaali kattadam. Thaali endhuku kadatharu? Iddaru kalisi jeevitham motham panchukodaniki. Okkari gurinchi okaru care teesukodaniki. Okkariki okaru support ga undadaniki.</p>
+    <p>Final ga choosthe... adhi motham care gurinche kadha. Nenu ippudu adhe chesthunna. Technically mana pelli inka kaaledhu. Official ga kuda kaaledhu. Kani naa manasulo matram miru naa bharya. Andhuke ala pilusthanu.</p>
+
+    <p>Miru prathi vishayam lo logic matladatharu. Kani ilanti mukhyamaina vishayallo matram logic vaddu antaru. Okkasari logic prakaram alochinchandi. Ippudu mimalni nenu premisthunna. Mee bava kuda premisthunnadu. Kani maa iddari prema lo... evari prema miku ekkuva kanipinchindhi? Nijamga answer cheppandi. Naku answer telusu. Adhi naa preme.</p>
+
+    <p>Endhukante nenu mimalni premisthunnanta ga inkewvaru preminchaleru. Premincharu kuda. Ee maata nenu kadhu... meere annaru. "Nannu mee la evvaru preminchaledhu." "Naa meedha mee la evvaru care teesukoledu." Mari alanti prema ante chinna vishayam kaadhu kadha.</p>
+
+    <p>Nenu edhi chesina oka range lo chestha. Kani miku matram anni simple ga undali. Cheppandi... miru emaina simple manishaa? Vere vallaki simple emo. Kani naa drushtilo matram kaadhu. Miru naa devatha. Naa devathaki chese prathi pani kuda oka range lone undali.</p>
+
+    <p>Konni sarlu miku nachakapoyina, nenu chala chesanu. Dhanike amma gariki kopam vachindhi. "Over caring nachaledhu" annaru. Naku appudu teliyadhu naa care miku over care la anipisthundhi ani. Kani nenu ala care cheyyadaniki reason matram... mire. Avunu... mire.</p>
+
+    <p>Miru okkasari annaru... "Ippati varaku nannu evaru ila care cheyyaledhu." Aa maata vinnaka naku oka decision vachindhi. "Ee ammayini jeevitham motham ilaage care cheyyali." Andhuke ala chesanu.</p>
+
+    <p>Kani, Hasini Garu... miru okkasari aina nannu care chesara ani nenu eppudu adaganu. Endhukante... miru chesaru. Adhi okkasari aina, naa jeevithaniki chaalu.</p>
+
+    <p>Aa roju gurthundha? Nenu Krishna keychain teesukochanu. Appudu akkada unna chettu leaf ni kodithe, miru ventane... "Thaguluthundhi..." annaru. Appudu nenu... "Abba... dhaniki ithe thaguluthundhi. Mari naku matram thagaladhaa?" ani annanu. Ventane miru... "Mikey thaguluthundhi ani cheppindhi." annaru.</p>
+    <p>Aa maata... naku chala chaalu, Hasini Garu. Naa meedha miru chupinchina aa chinna care ni kuda nenu eppatiki marchipolenu. Endhukante naa prema ala untundhi. Naa prema... amma prema lantidhi.</p>
+
+    <p>Miru nannu vaddu anna... kadhu anna... chii kottina... thittina... kottina... arichina... respect ivvakapoyina... nannu emaina anina... em chesina... naa prema matram mee meedha eppatiki maaradhu. Endhukante naa prema conditions meedha nadiche prema kaadhu. Adhi amma prema lantidhi.</p>
+
+    <p>Inko vishayam cheppadam marchipoyanu. Nenu, mee bava... ippudu kalisipoyam. Bava–bamardhi ayyam. Maa iddariki manchi bonding kudhirindhi. Mee valle. Thank you, Hasini Garu. Ippudu maku mee meedha fight kanna... maa bonding ekkuva aipoyindhi. Mee gurinchi matladukuntam. Kani appudappudu maatrame... occasionally.</p>
+
+    <p>Inko vishayam... mavayya chusi em antaro naku teliyadhu. Kani ayana emaina anna... miru okkate cheppandi... "Miku message chesindhi vadu. Velli vadine adagandi." Migathadhi nenu chusukunta. Konchem pogaru ga untundhi naa style. Kani adhi tappadhu. Endhukante evaraina mimalni emi anadam naku nachadhu.</p>
+
+    <p>Inka em cheppali, Hasini Garu? Miku already anni telusu. Kottaga cheppalsina vishayalu emi levu. Antha ippudu mee chethilo... mariyu aa Devudi chethilo undhi.</p>
+
+    <p>Kani oka vishayam matram chepthanu. Nenu vadilesthe... naku migiledhi chippe. Endhukante manaku kavalsina dhani kosam maname fight cheyyali. Alasipoyina... baadha vachhina... kopam vachhina... edhaina jarigina... hope matram vadulukokudadhu.</p>
+
+    <p>Miku Keanu Reeves gurinchi telusa? Ayana oka manchi maata annaru:</p>
+    <blockquote>"If you can't fight for your love, what kind of love do you have?"</blockquote>
+    <p>Aa maata naku chala nachindhi. Nijame kadha? "Evaro edo chestharu..." "Thane realise avthundhi..." "Devudu chusukuntadu..." ani wait chesthu kurchokudadhu. Konni situations lo ala wait cheyyadam correct. Kani prathi situation lo kaadhu. Konni saarlu maname mana prema kosam nilabadali. Fight cheyyali. Appude aa prema viluva untundhi.</p>
+
+    <p>Inko funny vishayam cheppana? Nenu sannaga ayina taruvatha nunchi, manchi shape loki vachhaka ammailu naku line esthunnaru. Monnati nunchi maa class lo oka ammai... "Gowtham... Gowtham... Gowtham..." ani nanne pattukoni tiruguthundhi.</p>
+    <p>Inkoka sari... nenu road meedha dorikina KitKat teesukoni maa friend ki ichanu. Vadu velli ammailaki cheppadu. Taruvatha oka ammai naa daggariki vachhi... "Gowtham, where is my KitKat?" ani adigindhi. Nenu shock ayyi... "I don't have." annanu. Ventane... "Then bring one tomorrow." andhi. Nenu em cheppalo ardham kaaledhu.</p>
+    <p>College lo oka side... bayata rent ki unde place lo inko side... ammailu ala chusthu untaru. Nijam cheppalante naku ibbandiga untundhi. Endhukante naku adhi istam ledhu. Nenu vallani chudanu. Endhukante... nenu mee vadini. Miku maata ichhanu. Ichhina maata tappadam ante... pranam poyinatte.</p>
+
+    <p class="song-note">♪ ippude "Neeli Meghamulalo Dharani Tejam" song vachindhi. Bale undhi — mana situation ki baaga sync ayye paata.</p>
+
+    <p>Marchipoyanu... monna miru devathala gurinchi chepparu. Vallaki kuda pellillu ayyayi ani annaru kadha. Miru cheppaka nenu aa vishayam meedha chala research chesanu. Appudu naku oka vishayam ardham ayyindhi. Mana situation ki sync ayye rendu beautiful stories unnayi.</p>
+  </div>
+</section>
+
+<!-- ============ MYTH SECTION ============ -->
+<section>
+  <div class="divider"><span></span><span class="mark">❦</span><span></span></div>
+  <h2 class="section-title">Rendu Kathalu</h2>
+  <p class="section-kicker">stories that felt like us</p>
+
+  <div class="myth-grid">
+    <div class="myth-card">
+      <h3>Sati &amp; Shiva</h3>
+      <p>Chinnappati nunchi Sati Amma, Shiva gurinchi kathalu vintoo perigindhi — supreme yogi, karuna swaroopam, bhakthulanu rakshinchevadu. Adhi andam kaadu, power kaadu — oka pavithramaina bhakthi, nirmalamaina prema.</p>
+      <p style="margin-top:14px;">"Nenu Shiva ni thappa inkewvarini pelli chesukonu" ani decide chesukundhi. Shiva ki appudu pelli meedha interest ledu. Kani aame vadilipettaledhu — deergha upavasalu, nirantara japam, dhyanam, kashtamaina tapas. Samvatsarala tharabadhi aame bhakthi, prema, nammakam chusi devathalu kuda aascharyapoyaru.</p>
+    </div>
+    <div class="myth-card">
+      <h3>Lakshmi &amp; Vishnu</h3>
+      <p>Samudra Manthanam samayam lo Lakshmi Amma bayataki vachharu. Devathalu, rishulu andharu aame tamani choose chesthundhi ani aasa pettukunnaru. Aame andarini gamaninchi, Vishnu Swamy lo balance, karuna, gnanam, vinayam chusaru.</p>
+      <p style="margin-top:14px;">Aa gunalu chusi Lakshmi Amma tana jeevitha sahachariga Vishnu Swamy ni enchukunnaru. Mundhu chala mandhi unnaru — aina, aame tana manasu vinindhi, tana jeevithaniki saripoye vaadini enchukundhi.</p>
+    </div>
+  </div>
+
+  <div class="letter" style="margin-top:56px;">
+    <p>Ee stories chadivina taruvatha naku oka maata gurthochindhi. Hasini Garu... mee bava mimalni premisthunnadu ani nenu eppudu kaadu annaledhu. Kani — nenu premisthunna vidhanam matram veru. Nenu mimalni vadulukovalani kaadu... gelavalani try chesthunna. Sati Amma Shiva kosam yela tapas chesindho, nenu naa prema ni alane kapadukovali ani try chesthunna.</p>
+    <p>Miru okkasari annaru — "Nenu decide avvalekapothunna." Lakshmi Amma mundhu matram chala mandhi devathalu unnaru. Aina aame tana manasu vinindhi. Mee mundhu matram iddaram maatrame unnām. Kabatti naa korika okkate — nannu preminchandi, nannu choose chesukondi.</p>
+
+    <p>Ivanni pakkana pedithe, miru inko maata chepparu — "Mana kosam maralsina avasaram ledhu. Manalni mana laane preminchali." Aa maata naku chala nachindhi. Kani okkasari alochinchandi — nenu mimalni mee lane preminchaledha? Nenu eppudaina "naa kosam ila undu, ala ready avvu, ila ready avvu, vallatho matladaku, villani kalavaku" ani cheppana? Ledu.</p>
+
+    <p>Okkate vishayam lo matram konchem jagratha padatha — abbaila vishayam lo. Endhukante nenu kuda oka abbayine, abbailu ela alochistharo naku telusu. Andhuke konchem careful ga untanu. Kani ippudu nenu ala lenu — endhukante miru unnaru. Mimalni kalisina taruvatha, mitho premalo paddaka, miru cheppina maatalu vinna taruvatha nenu chala maaranu. Complete ga maaranu. Aa maarpu matram manchi maarpu. Dhaniki reason — miru.</p>
+
+    <p>Hasini Garu, nijam cheppalante naku ippudu em rayalo ardham kavatledhu. Naa prema ni kapadukovali — adhi okkate naku telusu. Miru natho matladakapothe naa mind motham confusion aipothundhi. Naa life motham thikamaka aipothundhi. Adhiki reason — mire.</p>
+
+    <p>Nenu enni cheppina, miru cheppedhi nenu ardham chesukolekapothunna. Endhukante prathi sari miru "Nannu vadileyandi" ani antaru. Kani nenu vinadaniki ishtapade maata matram adhi kaadhu. Migatha anni cheppandi — kopam padandi, thittandi, aravandi — kani aa okka maata matram cheppakandi. Adhi vinnappudu naa gunde okkasari aagipoyinattu untundhi.</p>
+
+    <p>Modhati story — pure love. Mee bava mimalni premisthunnadu, adhi nenu eppudu deny cheyyaledhu. Kani naa prema matram ekkuva. Adhi ahankaram tho cheppadam kaadhu, nammakam tho chepthunna. Sati Amma Shiva ni ela premichindho, nenu mimalni ala premisthunna ani nammutunna.</p>
+
+    <p>Rendo story — Lakshmi Amma. Miru annaru — "Nenu decide avvalekapothunna." Mee mundhu matram iddaram maatrame unnām. Kabatti naa korika okkate — nannu preminchandi, nannu choose chesukondi. Endhukante naa prema Sati Amma prema la mondidhi. Mari naa nammakam — Lakshmi Amma Vishnu Swamy ni enchukunnattu — miru oka roju nanne enchukuntaru ani.</p>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section>
+  <div class="divider"><span></span><span class="mark">❦</span><span></span></div>
+  <h2 class="section-title">Mana Jyapakalu</h2>
+  <p class="section-kicker">a few of our moments — replace these with your own photos</p>
+
+  <!--
+    HOW TO ADD YOUR PHOTOS:
+    1. Put this HTML file and your photo files in the SAME folder
+       (or a subfolder, e.g. "media" — just update the src paths to match, like media/photo1.jpg).
+    2. Name your files to match the src values below: featured.jpg, photo1.jpg, photo2.jpg, etc.
+       Or keep your own filenames and just edit the src="" values to match.
+    3. If a file is missing or misnamed, the frame will automatically show
+       a little placeholder heart instead of breaking — so it's safe to test before all photos are ready.
+  -->
+
+  <!-- Big featured photo -->
+  <div class="big-frame-wrap">
+    <div class="big-frame">
+      <img src="featured.jpg" alt="Featured photo of Hasini and Adithya"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;">
+        <span class="heart-mark">♥</span>Featured Photo
+      </div>
+    </div>
+    <div class="big-frame-caption">our favorite one</div>
+  </div>
+
+  <div class="gallery-grid" id="gallery">
+    <div class="frame">
+      <img src="photo1.jpg" alt="Photo 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 1</div>
+    </div>
+    <div class="frame">
+      <img src="photo2.jpg" alt="Photo 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 2</div>
+    </div>
+    <div class="frame">
+      <img src="photo3.jpg" alt="Photo 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 3</div>
+    </div>
+    <div class="frame">
+      <img src="photo4.jpg" alt="Photo 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 4</div>
+    </div>
+    <div class="frame">
+      <img src="photo5.jpg" alt="Photo 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 5</div>
+    </div>
+    <div class="frame">
+      <img src="photo6.jpg" alt="Photo 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-label" style="display:none; flex-direction:column; align-items:center;"><span class="heart-mark">♥</span>Photo 6</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<div class="closing">
+  <div class="divider"><span></span><span class="mark">❦</span><span></span></div>
+  <p class="final">Ganta sepu nunchi continuous ga type chesthunna. Fingers kuda pain avutunnayi.<br><br>Ee letter lo unna prathi maata gurinchi Alochinchandi. Mundhuki vellandi. Endhukante — miku nenu unna. Ippudu unna. Repu unta. Eppatiki unta.</p>
+  <p class="final" style="margin-top:40px;">I Love You, Hasini Garu.<br>Manam Pelli Cheskundham. ❤️</p>
+  <div class="names">Hasini &nbsp;·&nbsp; Adithya</div>
+  <div class="tap-hint">tap anywhere ✦</div>
+</div>
+
+<footer>made with a whole heart, for Hasini</footer>
+
+<script>
+  // ---------- petals ----------
+  const petalField = document.getElementById('petals');
+  const PETAL_COUNT = 22;
+  for(let i=0;i<PETAL_COUNT;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animationDuration = (9 + Math.random()*10) + 's';
+    p.style.animationDelay = (Math.random()*14) + 's';
+    p.style.opacity = 0.4 + Math.random()*0.5;
+    p.style.transform = `scale(${0.6 + Math.random()*0.9})`;
+    petalField.appendChild(p);
+  }
+
+  // ---------- gate / entry ----------
+  const gate = document.getElementById('gate');
+  const enterBtn = document.getElementById('enterBtn');
+  const bgm = document.getElementById('bgm');
+  const muteBtn = document.getElementById('muteBtn');
+  let playing = false;
+
+  enterBtn.addEventListener('click', () => {
+    gate.classList.add('hide');
+    bgm.play().then(()=>{ playing = true; muteBtn.textContent = '♪'; }).catch(()=>{ /* no valid song src yet */ });
+  });
+
+  muteBtn.addEventListener('click', () => {
+    if(playing){ bgm.pause(); playing=false; muteBtn.textContent='♪̶'; }
+    else { bgm.play().then(()=>{playing=true; muteBtn.textContent='♪';}).catch(()=>{}); }
+  });
+
+  // ---------- tap-anywhere hearts ----------
+  const messages = ['Hasini Loves Adithya ❤','Hasini Loves Adithya ❤','Hasini Loves Adithya ❤'];
+  function spawnHeart(x,y){
+    const el = document.createElement('div');
+    el.className = 'tap-heart';
+    el.style.left = x+'px';
+    el.style.top = y+'px';
+    el.textContent = messages[Math.floor(Math.random()*messages.length)];
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1900);
+  }
+  document.addEventListener('click', (e) => {
+    if(gate.classList.contains('hide')){
+      spawnHeart(e.clientX, e.clientY);
+    }
+  });
+  document.addEventListener('touchstart', (e) => {
+    if(gate.classList.contains('hide') && e.touches[0]){
+      spawnHeart(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, {passive:true});
+
+  // ---------- scroll reveal for letter paragraphs ----------
+  const revealTargets = document.querySelectorAll('.letter p, .letter blockquote, .letter .highlight');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  revealTargets.forEach(t=>io.observe(t));
+</script>
+
+</body>
+</html>
